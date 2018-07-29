@@ -16,7 +16,7 @@ yarn run build
 ```
 
 ### Lints and fixes files
-https://vue-j
+
 ```
 yarn run lint
 ```
