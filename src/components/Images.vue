@@ -21,7 +21,8 @@
                     <div :key="image.deletehash" class="column is-4-desktop is-6-tablet"
                          v-for="(image, index) in imageList">
                         <div v-if="image.type.includes('video')">
-                            <video autoplay loop @click="setLightBox(index)">
+                            <video muted="muted" loop @click="setLightBox(index)" @mouseleave="stopVideo"
+                                   @mouseover="playVideo">
                                 <source :src="image.link">
                             </video>
                         </div>
@@ -102,7 +103,13 @@
             },
             setIsVideo() {
                 this.video = this.imageList[this.currentImageLightBox].type.includes("video");
-            }
+            },
+            playVideo(event) {
+                event.target.play();
+            },
+            stopVideo(event) {
+                event.target.pause();
+            },
         }
     }
 </script>
