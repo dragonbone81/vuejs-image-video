@@ -33,6 +33,7 @@
                         </div>
                     </div>
                 </div>
+                <div v-if="bottomOfPage" style="margin-bottom: 50px">Bottom of Page</div>
             </div>
         </section>
     </div>
@@ -52,6 +53,10 @@
                 lightBoxLaunched: false,
                 currentImageLightBox: 0,
                 video: false,
+                page: 0,
+                bottomOfPage: false,
+                endOfData: false,
+                fetchingData: false,
             }
         },
         components: {LightBox},
@@ -72,14 +77,19 @@
         },
         methods: {
             getImages() {
-                this.loading = true;
-                api.getImages(this.username, this.token).then((response) => {
+                this.fetchingData = true;
+                if (!this.imageList)
+                    this.loading = true;
+                api.getImages(this.username, this.token, this.page).then((response) => {
                     this.setImageList(response.data);
                     this.loading = false;
+                    this.fetchingData = false;
                 })
             },
             setImageList(list) {
-                this.imageList = list;
+                if (!list.length)
+                    this.endOfData = true;
+                this.imageList = [...this.imageList, ...list];
             },
             setLightBox(index) {
                 this.currentImageLightBox = index;
@@ -110,6 +120,22 @@
             stopVideo(event) {
                 event.target.pause();
             },
+            scroll() {
+                window.onscroll = () => {
+                    if (!this.endOfData && !this.fetchingData) {
+                        const bottomOfWindow = document.documentElement.scrollTop + window.innerHeight >= document.documentElement.offsetHeight - 400;
+                        bottomOfWindow ? this.bottomOfPage = true : this.bottomOfPage = false;
+
+                        if (this.bottomOfPage) {
+                            this.page++;
+                            this.getImages();
+                        }
+                    }
+                };
+            },
+        },
+        mounted() {
+            this.scroll();
         }
     }
 </script>

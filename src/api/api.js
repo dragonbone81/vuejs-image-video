@@ -1,8 +1,8 @@
 const client_id = '5bc320d89fc9071';
 const baseUrl = 'https://api.imgur.com';
 
-const getImages = async (username, token) => {
-    const url = `${baseUrl}/3/account/${username}/images/`;
+const getImages = async (username, token, page) => {
+    const url = `${baseUrl}/3/account/${username}/images/?page=${page}`;
     const response = await fetch(url, {
         headers: {"Authorization": `Bearer ${token}`}
     });
