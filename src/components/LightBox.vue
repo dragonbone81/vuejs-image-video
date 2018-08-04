@@ -4,9 +4,12 @@
         <i @click="setPrevious" class="fas fa-angle-left"
            :class="hasPrevious?'button-active':'button-inactive'"></i>
         <div class="modal-content" style="width: auto; height: auto;overflow: visible;">
-            <figure class="image" style="">
+            <figure v-if="!video" class="image" style="">
                 <img :src="imageUrl"/>
             </figure>
+            <video v-if="video" autoplay loop>
+                <source :src="imageUrl">
+            </video>
         </div>
         <i @click="setNext" class="fas fa-angle-right"
            :class="hasNext?'button-active':'button-inactive'"></i>
@@ -24,7 +27,8 @@
             setPrevious: Function,
             setNext: Function,
             hasPrevious: Boolean,
-            hasNext: Boolean
+            hasNext: Boolean,
+            video: Boolean,
 
         },
         methods: {

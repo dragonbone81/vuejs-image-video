@@ -7,6 +7,7 @@
                   :setPrevious="setPrevious"
                   :hasNext="hasNext"
                   :hasPrevious="hasPrevious"
+                  :video="isVideo"
         />
         <section class="section">
             <div class="container" style="text-align: center">
@@ -19,9 +20,16 @@
                 <div v-else class="columns is-tablet is-multiline">
                     <div :key="image.deletehash" class="column is-4-desktop is-6-tablet"
                          v-for="(image, index) in imageList">
-                        <figure class="image is-5by3">
-                            <img data- :src="image.link" @click="setLightBox(index)"/>
-                        </figure>
+                        <div v-if="image.type.includes('video')">
+                            <video autoplay loop @click="setLightBox(index)">
+                                <source :src="image.link">
+                            </video>
+                        </div>
+                        <div v-else>
+                            <figure class="image is-5by3">
+                                <img data- :src="image.link" @click="setLightBox(index)"/>
+                            </figure>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -42,6 +50,7 @@
                 loading: false,
                 lightBoxLaunched: false,
                 currentImageLightBox: 0,
+                video: false,
             }
         },
         components: {LightBox},
@@ -52,6 +61,9 @@
             },
             hasNext() {
                 return this.currentImageLightBox < this.imageList.length - 1
+            },
+            isVideo() {
+                return this.video
             }
         },
         created() {
@@ -70,7 +82,8 @@
             },
             setLightBox(index) {
                 this.currentImageLightBox = index;
-                this.lightBoxLaunched = !this.lightBoxLaunched
+                this.lightBoxLaunched = !this.lightBoxLaunched;
+                this.setIsVideo();
             },
             closeLightBox() {
                 this.lightBoxLaunched = false
@@ -78,12 +91,17 @@
             setNext() {
                 this.currentImageLightBox = this.currentImageLightBox + 1 >= this.imageList.length ?
                     this.currentImageLightBox :
-                    this.currentImageLightBox + 1
+                    this.currentImageLightBox + 1;
+                this.setIsVideo();
             },
             setPrevious() {
                 this.currentImageLightBox = this.currentImageLightBox - 1 < 0 ?
                     0 :
-                    this.currentImageLightBox - 1
+                    this.currentImageLightBox - 1;
+                this.setIsVideo();
+            },
+            setIsVideo() {
+                this.video = this.imageList[this.currentImageLightBox].type.includes("video");
             }
         }
     }
