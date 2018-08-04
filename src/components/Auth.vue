@@ -27,8 +27,6 @@
             ...mapState(['loggedIn']),
         },
         methods: {}
-
-
     }
 </script>
 

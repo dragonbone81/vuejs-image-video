@@ -51,8 +51,13 @@
                 this.$store.dispatch('logout').then();
             },
             hamburgerClicked(event) {
-                event.srcElement.classList.toggle('is-active');
-                document.getElementById(event.target.dataset.target).classList.toggle('is-active');
+                if (event.srcElement.nodeName === "SPAN") {
+                    event.srcElement.offsetParent.classList.toggle('is-active');
+                    document.getElementById(event.target.offsetParent.dataset.target).classList.toggle('is-active');
+                } else {
+                    event.srcElement.classList.toggle('is-active');
+                    document.getElementById(event.target.dataset.target).classList.toggle('is-active');
+                }
             },
         }
     }

@@ -1,25 +1,37 @@
 <template>
-    <section class="section">
-        <div class="container">
-            <h1 class="title">Gallery</h1>
-            <div v-if="loading" class="columns">
-                <span class="icon column">
+    <div>
+        <LightBox :imageUrl="imageList[currentImageLightBox]?imageList[currentImageLightBox].link:''"
+                  :active="lightBoxLaunched"
+                  :closeLightBox="closeLightBox"
+                  :setNext="setNext"
+                  :setPrevious="setPrevious"
+                  :hasNext="hasNext"
+                  :hasPrevious="hasPrevious"
+        />
+        <section class="section">
+            <div class="container" style="text-align: center">
+                <h1 class="title">Gallery</h1>
+                <div v-if="loading" class="columns is-centered" style="text-align: center">
+                <span class="column">
                     <i class="fas fa-spinner fa-spin"></i>
                 </span>
-            </div>
-            <div v-else class="columns is-tablet is-multiline">
-                <div :key="image.deletehash" class="column is-4-desktop is-6-tablet" v-for="image in imageList">
-                    <figure class="image is-5by3">
-                        <img :src="image.link"/>
-                    </figure>
+                </div>
+                <div v-else class="columns is-tablet is-multiline">
+                    <div :key="image.deletehash" class="column is-4-desktop is-6-tablet"
+                         v-for="(image, index) in imageList">
+                        <figure class="image is-5by3">
+                            <img data- :src="image.link" @click="setLightBox(index)"/>
+                        </figure>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </div>
 </template>
 
 <script>
     import {mapState} from 'vuex'
+    import LightBox from './LightBox'
     import api from '../api/api'
 
     export default {
@@ -28,11 +40,19 @@
             return {
                 imageList: [],
                 loading: false,
+                lightBoxLaunched: false,
+                currentImageLightBox: 0,
             }
         },
-        components: {},
+        components: {LightBox},
         computed: {
             ...mapState(['token', 'username']),
+            hasPrevious() {
+                return this.currentImageLightBox > 0
+            },
+            hasNext() {
+                return this.currentImageLightBox < this.imageList.length - 1
+            }
         },
         created() {
             this.getImages();
@@ -48,6 +68,23 @@
             setImageList(list) {
                 this.imageList = list;
             },
+            setLightBox(index) {
+                this.currentImageLightBox = index;
+                this.lightBoxLaunched = !this.lightBoxLaunched
+            },
+            closeLightBox() {
+                this.lightBoxLaunched = false
+            },
+            setNext() {
+                this.currentImageLightBox = this.currentImageLightBox + 1 >= this.imageList.length ?
+                    this.currentImageLightBox :
+                    this.currentImageLightBox + 1
+            },
+            setPrevious() {
+                this.currentImageLightBox = this.currentImageLightBox - 1 < 0 ?
+                    0 :
+                    this.currentImageLightBox - 1
+            }
         }
     }
 </script>
@@ -57,6 +94,7 @@
         border-radius: 5px;
         border: 2px solid grey;
     }
+
     .fa-spinner {
         font-size: 100px;
     }

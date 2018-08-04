@@ -14,8 +14,12 @@ export default new Vuex.Store({
             commit('setToken', access_token);
             commit('setUsername', account_username);
             commit('setLoggedIn');
+            localStorage.setItem("access_token", access_token);
+            localStorage.setItem("account_username", account_username);
         },
         logout({commit}){
+            localStorage.removeItem("access_token");
+            localStorage.removeItem("account_username");
             commit('setToken', "");
             commit('setUsername', "");
             commit('setLoggedIn');
