@@ -1,6 +1,5 @@
 const client_id = '5bc320d89fc9071';
 const baseUrl = 'https://api.imgur.com';
-const loginUrl = `${baseUrl}/oauth2/authorize?client_id=${client_id}&response_type=token&state=running`;
 
 const getImages = async (username, token) => {
     const url = `${baseUrl}/3/account/${username}/images/`;
@@ -10,4 +9,17 @@ const getImages = async (username, token) => {
     return response.json()
 };
 
-export default {getImages, loginUrl}
+const uploadImage = async (token, formData) => {
+    const url = `${baseUrl}/3/image`;
+    const response = await fetch(url, {
+        headers: {"Authorization": `Bearer ${token}`},
+        method: 'POST',
+        body: formData
+    });
+    return response.json()
+};
+const getLoginUrl = (state) => {
+    return `${baseUrl}/oauth2/authorize?client_id=${client_id}&response_type=token&state=${state}`
+};
+
+export default {getImages, getLoginUrl, uploadImage}

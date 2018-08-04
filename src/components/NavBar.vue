@@ -15,7 +15,10 @@
         <div id="navbarExampleTransparentExample" class="navbar-menu">
             <div class="navbar-start">
                 <div v-if="loggedIn" class="navbar-item">Welcome {{username}}</div>
+                <router-link class="navbar-item" to="/">Gallery</router-link>
+                <router-link class="navbar-item" to="/upload">Upload</router-link>
             </div>
+
 
             <div class="navbar-end">
                 <div v-if="!loggedIn" class="navbar-item">
@@ -32,16 +35,18 @@
 <script>
     import {mapState} from 'vuex'
     import auth from '../api/api'
+    import router from "../router";
 
     export default {
         name: "NavBar",
         data() {
-            return {
-                loginUrl: auth.loginUrl,
-            }
+            return {}
         },
         computed: {
             ...mapState(['username', 'loggedIn']),
+            loginUrl() {
+                return auth.getLoginUrl(router.currentRoute.path.split('/').join('-'))
+            },
         },
         methods: {
             login() {

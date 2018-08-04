@@ -20,7 +20,7 @@
         created() {
             const callbackResponse = qs.parse(this.$route.hash.split("#")[1]);
             this.$store.dispatch('login', callbackResponse).then();
-            router.push('/');
+            router.push(qs.parse(this.$route).query.state.split('-').join('/'));
         },
 
         computed: {

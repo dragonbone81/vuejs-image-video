@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from './components/Home'
 import Auth from './components/Auth'
+import Upload from './components/Upload'
 
 Vue.use(VueRouter);
 
@@ -18,6 +19,11 @@ export default new VueRouter({
             path: '/auth/callback',
             name: 'callback',
             component: Auth,
+        },
+        {
+            path: '/upload',
+            name: 'upload',
+            component: Upload,
         },
     ]
 })
