@@ -17,7 +17,7 @@
                     <i class="fas fa-spinner fa-spin"></i>
                 </span>
                 </div>
-                <div v-else class="columns is-tablet is-multiline">
+                <div v-else class="columns is-tablet is-multiline is-vcentered">
                     <div :key="image.deletehash" class="column is-4-desktop is-6-tablet"
                          v-for="(image, index) in imageList">
                         <div v-if="image.type.includes('video')">
@@ -27,13 +27,16 @@
                             </video>
                         </div>
                         <div v-else>
-                            <figure class="image is-5by3">
-                                <img data- :src="image.link" @click="setLightBox(index)"/>
-                            </figure>
+                            <img data- :src="image.link" @click="setLightBox(index)"/>
                         </div>
                     </div>
                 </div>
-                <div v-if="bottomOfPage" style="margin-bottom: 50px">Bottom of Page</div>
+                <div v-if="bottomOfPage" style="margin-bottom: 50px">
+                    <div v-if="fetchingData"><i class="fas fa-spinner fa-spin"></i></div>
+                    <div v-else>
+                        <button @click="backToTop" class="button is-primary">Back to Top</button>
+                    </div>
+                </div>
             </div>
         </section>
     </div>
@@ -49,7 +52,7 @@
         data() {
             return {
                 imageList: [],
-                loading: false,
+                loading: true,
                 lightBoxLaunched: false,
                 currentImageLightBox: 0,
                 video: false,
@@ -78,7 +81,7 @@
         methods: {
             getImages() {
                 this.fetchingData = true;
-                if (!this.imageList)
+                if (!this.imageList.length)
                     this.loading = true;
                 api.getImages(this.username, this.token, this.page).then((response) => {
                     this.setImageList(response.data);
@@ -133,10 +136,20 @@
                     }
                 };
             },
+            backToTop() {
+                window.smoothscroll();
+            },
         },
         mounted() {
             this.scroll();
-        }
+            window.smoothscroll = () => {
+                let currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
+                if (currentScroll > 0) {
+                    window.requestAnimationFrame(window.smoothscroll);
+                    window.scrollTo(0, Math.floor(currentScroll - (currentScroll / 5)));
+                }
+            };
+        },
     }
 </script>
 
@@ -148,5 +161,11 @@
 
     .fa-spinner {
         font-size: 100px;
+    }
+
+    .is-vcentered {
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
     }
 </style>
