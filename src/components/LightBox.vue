@@ -56,10 +56,16 @@
 
     .button-active {
         color: aliceblue;
+        cursor: pointer;
+        transition: transform .2s;
+    }
+    .button-active:hover {
+        transform: scale(1.1);
     }
 
     .button-inactive {
         color: gray;
+        cursor: not-allowed;
     }
 
     .modal-content {

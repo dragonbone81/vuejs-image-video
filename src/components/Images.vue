@@ -157,6 +157,7 @@
     img {
         border-radius: 5px;
         border: 2px solid grey;
+        cursor: pointer;
     }
 
     .fa-spinner {
