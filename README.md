@@ -1,25 +1,6 @@
 # vuejs-image-video
 
-## Project setup
-```
-yarn install
-```
-
-### Compiles and hot-reloads for development
-```
-yarn run serve
-```
-
-### Compiles and minifies for production
-```
-yarn run build
-```
-
-### Lints and fixes files
-
-```
-yarn run lint
-```
+# Vue JS ImgurAPI Browse/Upload (VueJS, Vuex, VueRouter, InfiniteScroll)
 
 ### Public Link
 https://vue-js-images.netlify.com
